@@ -33,14 +33,21 @@ $not_found = (count($found) - count(array_filter($found)));
 
 $requests_per_day = new DateChart();
 $users_per_day = new DateChart();
+$users_per_hour = new DateChart('G');
 
 foreach ($events as $e => $event) {
     $date = (new DateTime())->setTimestamp($event['time'] / 1000);
     $chat_id = $event['properties']['chat_id'];
 
     $requests_per_day->setDot($date, $e);
+    $users_per_hour->setDot($date, $e);
     $users_per_day->setDot($date, $event['properties']['chat_id']);
 }
+
+$dots = $users_per_hour->getDots();
+$users_per_hour_chart = array_map(function($hour) use ($dots) {
+    return $dots[$hour] ?? 0;
+}, range(0, 23));
 
 // export data
 
@@ -53,6 +60,7 @@ $data = [
     'charts' => json_encode([
         'requests_per_day' => $requests_per_day->getChart($week_ago, $today),
         'users_per_day' => $users_per_day->getChart($week_ago, $today),
+        'users_per_hour' => $users_per_hour_chart,
     ]),
 ];
 

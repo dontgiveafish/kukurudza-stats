@@ -45,8 +45,18 @@
     </div>
 
     <div class="row">
-        <canvas id="canvas"></canvas>
+        <canvas id="users_chart"></canvas>
     </div>
+
+    <div class="row">
+        <h2>Playbill requests by hour</h2>
+        <canvas id="hours_chart"></canvas>
+    </div>
+
+    <footer>
+        <p>by the way, follow this project on <a href="https://github.com/dontgiveafish/kukurudza-stats">github</a></p>
+    </footer>
+
 </div>
 
 <script>
@@ -73,9 +83,27 @@
         }
     };
 
+    var config2 = {
+        type: 'bar',
+        data: {
+            labels: Object.keys(charts.users_per_hour),
+            datasets: [{
+                label: "Playbill requests",
+                backgroundColor: "rgb(255, 99, 132)",
+                borderColor: "rgb(255, 99, 132)",
+                data: Object.values(charts.users_per_hour),
+            }]
+        }
+    };
+
     window.onload = function() {
-        var ctx = document.getElementById("canvas").getContext("2d");
-        window.myLine = new Chart(ctx, config);
+        var users_chart = document.getElementById("users_chart").getContext("2d");
+        window.myLine = new Chart(users_chart, config);
+
+        var hours_chart = document.getElementById("hours_chart").getContext("2d");
+        window.myLine = new Chart(hours_chart, config2);
+
+
     };
 
 </script>
